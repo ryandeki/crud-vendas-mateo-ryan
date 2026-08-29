@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('nome', 50);
-            $table->string('estado');
-            $table->text('descricao')->nullable();
+            $table->string('estado', 30);
+            $table->text('descricao', 200)->nullable();
             $table->double('preco');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
