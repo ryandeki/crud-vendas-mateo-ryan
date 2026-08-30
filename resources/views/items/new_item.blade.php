@@ -70,7 +70,7 @@
                         </a>
 
                         <button type="submit" class="btn btn-primary px-5">
-                            <i class="bi bi-check-circle me-2"></i>Salvar
+                            <i class="bi bi-check-circle me-2"></i>Anunciar
                         </button>
                     </div>
                 </div>>

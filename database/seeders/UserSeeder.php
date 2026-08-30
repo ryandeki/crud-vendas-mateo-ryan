@@ -9,13 +9,13 @@ use App\Models\User;
 
 class UserSeeder extends Seeder
 {
-    
+
     public function run(): void
     {
         DB::table('users')->insert([
-            'username' => 'mateo@gmail.com',
+            'username' => 'mateo',
+            'email' => 'mateo@gmail.com',
             'senha' => bcrypt('15012009'),
         ]);
-
     }
 }

@@ -9,7 +9,7 @@
     @if($items->isEmpty())
     <div class="row mt-5">
         <div class="col text-center">
-            <p class="mb-4 text-dark fs-5">Nenhum item anunciado para venda</p>
+            <p class="mb-4 text-dark fs-5">Nenhum item anunciado para compra</p>
             <a href="{{ route('newItem') }}" class="btn btn-primary px-4 py-2">
                 <i class="fa-regular fa-pen-to-square me-2"></i>Anuncie um item!
             </a>

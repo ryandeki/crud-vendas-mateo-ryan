@@ -13,13 +13,22 @@
 
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <form action="{{ route('login.submit') }}" method="POST" novalidate>
+                        <form action="{{ route('signin.submit') }}" method="POST" novalidate>
                             @csrf
                             <div class="mb-3">
                                 <label for="text_username" class="form-label">Username:</label>
                                 <input type="text" class="form-control text-dark" name="text_username"
                                     value="{{ old('text_username') }}">
                                 @error('text_username')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="text_email" class="form-label">E-mail:</label>
+                                <input type="email" class="form-control text-dark" name="text_email"
+                                    value="{{ old('text_email') }}">
+                                @error('text_email')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -34,7 +43,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary w-100">LOGIN</button>
+                                <button type="submit" class="btn btn-primary w-100">REGISTRAR</button>
                             </div>
                         </form>
 
@@ -43,18 +52,12 @@
                             {{ session('login_error') }}
                         </div>
                         @endif
-
-                        @if(session('signin_success'))
-                        <div class="alert alert-success text-center">
-                            {{ session('signin_success') }}
-                        </div>
-                        @endif
                     </div>
                 </div>
 
                 <div class="row align-items-center">
-                    <p class="small col-8 mb-0">Não tem uma conta?</p>
-                    <button class="btn btn-secondary w-auto col-4"><a href="{{ route('signin') }}" class="link-light link-underline link-underline-opacity-0">Registre-se</a></button>
+                    <p class="small col-9 mb-0">Já tem uma conta?</p>
+                    <button class="btn btn-secondary w-auto col-3"><a href="{{ route('login') }}" class="link-light link-underline link-underline-opacity-0">Entre</a></button>
                 </div>
 
                 <div class="text-center text-dark mt-2">

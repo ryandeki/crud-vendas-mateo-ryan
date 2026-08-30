@@ -16,6 +16,7 @@ Route::middleware([CheckIsLogged::class])->group(function () {
     Route::post('edit-item-submit', [MainController::class, 'editItemSubmit'])->name('edit.item.submit');
     Route::get('delete-item/{id}', [MainController::class, 'deleteItem'])->name('deleteItem');
     Route::get('delete-item-confirm/{id}', [MainController::class, 'deleteItemConfirm'])->name('delete.item.confirm');
+    Route::get('item-page/{id}', [MainController::class, 'toAccessItemPage'])->name('item.page');
 
     Route::get('/categories', [MainController::class, 'categories'])->name('categories');
     Route::get('/new-category', [MainController::class, 'newCategory'])->name('new');
@@ -33,4 +34,7 @@ Route::middleware([CheckIsLogged::class])->group(function () {
 Route::middleware([CheckIsNotLogged::class])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login-submit', [AuthController::class, 'loginSubmit'])->name('login.submit');
+
+    Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
+    Route::post('/signin-submit', [AuthController::class, 'signinSubmit'])->name('signin.submit');
 });
