@@ -38,7 +38,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col text-center">
-                        <a href="{{ route('home') }}" class="btn btn-danger px-5">
+                        <a href="{{ route('categories') }}" class="btn btn-danger px-5">
                             <i class="bi bi-ban me-2"></i>Cancelar
                         </a>
 
