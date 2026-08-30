@@ -5,13 +5,13 @@
 @include('top_bar')
 
 <div class="container-fluid overflow-hidden px-4 mt-3">
-    <h4 class="text-dark fw-bold m-0">Página Inicial</h4>
+    <h4 class="text-dark fw-bold m-0">Meus Itens</h4>
     @if($items->isEmpty())
     <div class="row mt-5">
         <div class="col text-center">
-            <p class="mb-4 text-dark fs-5">Nenhum item anunciado para venda</p>
+            <p class="mb-4 text-dark fs-5">Você não tem nenhum item anunciado</p>
             <a href="{{ route('newItem') }}" class="btn btn-primary px-4 py-2">
-                <i class="fa-regular fa-pen-to-square me-2"></i>Anuncie um item!
+                <i class="fa-regular fa-pen-to-square me-2"></i>Anuncie seu primeiro item!
             </a>
         </div>
     </div>

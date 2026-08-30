@@ -5,16 +5,19 @@ namespace App\Services;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
-class Operations {
-    public static function decryptId($value) {
+class Operations
+{
+    public static function decryptId($value)
+    {
         try {
-            return Crypt::decryptId($value);
+            return Crypt::decrypt($value);
         } catch (DecryptException $e) {
             return redirect('/');
         }
     }
 
-    public static function encryptId($value) {
+    public static function encryptId($value)
+    {
         return Crypt::encrypt($value);
     }
 }
