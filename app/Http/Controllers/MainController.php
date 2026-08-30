@@ -154,6 +154,16 @@ class MainController extends Controller
         return redirect()->route('home');
     }
 
+    public function toAccessItemPage($id)
+    {
+        $decrypted_id = Operations::decryptId($id);
+        $item = Item::find($decrypted_id);
+        if (!$item) {
+            return redirect()->route('home');
+        }
+        return view('items.item_page', ['item' => $item]);
+    }
+
     public function newCategory()
     {
         return view('new_category');

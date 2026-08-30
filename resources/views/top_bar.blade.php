@@ -11,12 +11,12 @@
         <div class="col">
             <div class="d-flex justify-content-end align-items-center">
                 <a href="{{ route('items') }}" class="link-offset-2 link-primary link-underline-opacity-0">Meus itens</a>
-                <a href="{{ route('categories') }}" class="link-offset-2 link-secondary link-underline-opacity-0">Minhas categorias</a>
+                <a href="{{ route('categories') }}" class="link-offset-2 link-secondary link-underline-opacity-0 ms-2">Minhas categorias</a>
                 <span class="me-3">
                     <i class="fa-solid fa-user-circle fa-lg text-secondary me-2"></i>{{ session('user.username') ?? '[username]' }}
                 </span>
                 <a href="{{ route('logout') }}" class="btn btn-outline-danger btn-sm px-3">
-                    Logout<i class="fa-solid fa-arrow-right-from-bracket ms-2"></i>
+                    Logout<i class="bi bi-box-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>

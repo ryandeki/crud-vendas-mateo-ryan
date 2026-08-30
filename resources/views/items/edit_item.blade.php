@@ -32,7 +32,7 @@
 
                                 @foreach ($categories as $category)
                                 @if ($category->status == 'active')
-                                <option value="{{ $category->nome }}" {{ old('category') == $category->nome || old($item->category_id) == $category->id ? 'selected' : '' }}>{{ $category->nome }}</option>
+                                <option value="{{ $category->nome }}" @selected($category->id == $item->category_id)>{{ $category->nome }}</option>
                                 @endif
                                 @endforeach
 
@@ -46,9 +46,9 @@
                         <div class="mb-3">
                             <label class="form-label"><span class="text-danger">*</span>Estado:</label>
                             <select class="form-select" name="status">
-                                <option value="new" selected>Novo</option>
-                                <option value="almost-new">Semi-novo</option>
-                                <option value="worn-out">Desgastado</option>
+                                <option value="new" @selected($item->estado == 'new')>Novo</option>
+                                <option value="almost-new" @selected($item->estado == 'almost-new')>Semi-novo</option>
+                                <option value="worn-out" @selected($item->estado == 'worn-out')>Desgastado</option>
                             </select>
                         </div>
 

@@ -1,17 +1,11 @@
-<?php
-
-use App\Models\User;
-use App\Models\Category;
-?>
-
 <div class="col-12 mb-3">
     <div class="card p-4 shadow-sm">
         <div class="row align-items-center">
 
             <div class="col">
-                <div class="row">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <p>{{ User::find($item->user_id)->username; }}</p>
+                <div class="row align-items-center" style="min-height: 50px">
+                    <i class="bi bi-person-circle col-auto fs-3"></i>
+                    <p class="col-auto mb-0">{{ $item->user->username; }}</p>
                 </div>
 
                 <h4 class="text-dark fw-bold m-0">
@@ -25,7 +19,7 @@ use App\Models\Category;
                 </div>
 
                 <div class="mt-1">
-                    <span class="badge bg-secondary">{{ Category::find($item->category_id)->nome }}</span>
+                    <span class="badge bg-secondary">{{ $item->category->nome }}</span>
                 </div>
 
                 <p class="text-muted small mt-2 mb-1">
@@ -57,15 +51,10 @@ use App\Models\Category;
                 </a>
                 @endif
 
-                @if($item->status != 'active')
-                <button class="btn btn-secondary px-3" disabled title="Item desativada">
-                    <i class="bi bi-ban me-2"></i>Acessar
-                </button>
-                @else
                 <a href="{{ route('item.page', \App\Services\Operations::encryptId($item->id)) }}" class="btn btn-primary px-3">
                     <i class="bi bi-box-arrow-in-right me-2"></i>Acessar
                 </a>
-                @endif
+
             </div>
 
         </div>
