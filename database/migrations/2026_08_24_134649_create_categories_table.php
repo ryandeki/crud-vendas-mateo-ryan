@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 50)->unique();
-            $table->text('descricao')->nullable();
-            $table->string('status');
+            $table->text('descricao', 95)->nullable();
+            $table->string('status', 20);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

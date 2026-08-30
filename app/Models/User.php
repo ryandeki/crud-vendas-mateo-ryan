@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Model
 {
-
     protected $fillable = [
         'username',
         'senha'
