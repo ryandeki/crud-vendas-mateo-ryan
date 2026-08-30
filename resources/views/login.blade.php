@@ -13,7 +13,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <form action="{{ route('login.submit')}}" method="POST" novalidate>
+                        <form action="{{ route('login.submit') }}" method="POST" novalidate>
                             @csrf
                             <div class="mb-3">
                                 <label for="text_username" class="form-label">Username:</label>
@@ -23,6 +23,7 @@
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3">
                                 <label for="text_password" class="form-label">Senha:</label>
                                 <input type="password" class="form-control text-dark" name="text_password"
@@ -31,10 +32,12 @@
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary w-100">LOGIN</button>
                             </div>
                         </form>
+
                         @if(session('login_error'))
                         <div class="alert alert-danger text-center">
                             {{ session('login_error') }}

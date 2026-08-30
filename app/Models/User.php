@@ -16,5 +16,9 @@ class User extends Model
     public function items() {
         return $this->hasMany(Item::class);
     }
+
+    public function categories() {
+        return $this->hasMany(Category::class);
+    }
     
 }   
