@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Services\Operations;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 
 class MainController extends Controller
@@ -194,7 +193,7 @@ class MainController extends Controller
     public function editCategory($id)
     {
         try {
-            $decrypted_id = Crypt::decrypt($id);
+            $decrypted_id = Operations::decrypt($id);
         } catch (DecryptException $e) {
             return redirect()->route('home');
         }
@@ -216,7 +215,7 @@ class MainController extends Controller
             'text_title.max' => 'O nome deve ter no máximo :max caracteres.',
         ]);
 
-        $id = Crypt::decrypt($request->category_id);
+        $id = Operations::decrypt($request->category_id);
 
         $category = Category::find($id);
         if (!$category) {
@@ -233,7 +232,7 @@ class MainController extends Controller
     public function deleteCategory($id)
     {
         try {
-            $decrypted_id = Crypt::decrypt($id);
+            $decrypted_id = Operations::decrypt($id);
         } catch (DecryptException $e) {
             return redirect()->route('home');
         }
@@ -246,7 +245,7 @@ class MainController extends Controller
 
     public function deleteCategoryConfirm($id)
     {
-        $decrypted_id = Crypt::decrypt($id);
+        $decrypted_id = Operations::decrypt($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
@@ -257,7 +256,7 @@ class MainController extends Controller
 
     public function toAccessCategory($id)
     {
-        $decrypted_id = Crypt::decrypt($id);
+        $decrypted_id = Operations::decrypt($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
