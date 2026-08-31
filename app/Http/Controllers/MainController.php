@@ -192,11 +192,9 @@ class MainController extends Controller
 
     public function editCategory($id)
     {
-        try {
-            $decrypted_id = Operations::decrypt($id);
-        } catch (DecryptException $e) {
-            return redirect()->route('home');
-        }
+        
+        $decrypted_id = Operations::decryptId($id);
+        
         $category = Category::find($decrypted_id);
         return view('edit_category', ['category' =>  $category]);
     }
@@ -215,7 +213,7 @@ class MainController extends Controller
             'text_title.max' => 'O nome deve ter no máximo :max caracteres.',
         ]);
 
-        $id = Operations::decrypt($request->category_id);
+        $id = Operations::decryptId($request->category_id);
 
         $category = Category::find($id);
         if (!$category) {
@@ -231,11 +229,9 @@ class MainController extends Controller
 
     public function deleteCategory($id)
     {
-        try {
-            $decrypted_id = Operations::decrypt($id);
-        } catch (DecryptException $e) {
-            return redirect()->route('home');
-        }
+        
+        $decrypted_id = Operations::decryptId($id);
+       
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
@@ -245,7 +241,7 @@ class MainController extends Controller
 
     public function deleteCategoryConfirm($id)
     {
-        $decrypted_id = Operations::decrypt($id);
+        $decrypted_id = Operations::decryptId($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
@@ -256,7 +252,7 @@ class MainController extends Controller
 
     public function toAccessCategory($id)
     {
-        $decrypted_id = Operations::decrypt($id);
+        $decrypted_id = Operations::decryptId($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
