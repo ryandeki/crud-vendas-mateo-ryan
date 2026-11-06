@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Services\Operations;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 
 class MainController extends Controller
@@ -132,7 +131,7 @@ class MainController extends Controller
     public function deleteItem($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::find($decrypted_id);
+        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
 
         if (!$item || $item->user_id != session('user')['id']) {
             return redirect()->route('home');
@@ -144,14 +143,38 @@ class MainController extends Controller
     public function deleteItemConfirm($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::find($decrypted_id);
+        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
 
-        if (!$item || $item->user_id != session('user')['id']) {
+        if (!$item || $item->user_id !== session('user')['id']) {
             return redirect()->route('home');
         }
 
-        $item->forceDelete();
+        if ($item->deleted_at !== null) {
+            $item->forceDelete();
+        }
+        else {
+            $item->delete();
+        }
+        
         return redirect()->route('home');
+    }
+
+    public function restoreItem($id) {
+        $decrypted_id = Operations::decryptId($id);
+        $item = Item::onlyTrashed()->where('id', $decrypted_id)->first();
+
+        if (!$item || $item->user_id !== session('user')['id']) {
+            return redirect()->route('home');
+        }
+
+        $item->restore();
+
+        return redirect()->back();
+    }
+
+    public function trashItems() {
+        $items = Item::onlyTrashed()->where('user_id', session('user')['id'])->get();
+        return view('items.trash_items', ['items' => $items]);
     }
 
     public function toAccessItemPage($id)
@@ -193,11 +216,9 @@ class MainController extends Controller
 
     public function editCategory($id)
     {
-        try {
-            $decrypted_id = Crypt::decrypt($id);
-        } catch (DecryptException $e) {
-            return redirect()->route('home');
-        }
+        
+        $decrypted_id = Operations::decryptId($id);
+        
         $category = Category::find($decrypted_id);
         return view('edit_category', ['category' =>  $category]);
     }
@@ -216,7 +237,7 @@ class MainController extends Controller
             'text_title.max' => 'O nome deve ter no máximo :max caracteres.',
         ]);
 
-        $id = Crypt::decrypt($request->category_id);
+        $id = Operations::decryptId($request->category_id);
 
         $category = Category::find($id);
         if (!$category) {
@@ -232,11 +253,9 @@ class MainController extends Controller
 
     public function deleteCategory($id)
     {
-        try {
-            $decrypted_id = Crypt::decrypt($id);
-        } catch (DecryptException $e) {
-            return redirect()->route('home');
-        }
+        
+        $decrypted_id = Operations::decryptId($id);
+       
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
@@ -246,7 +265,7 @@ class MainController extends Controller
 
     public function deleteCategoryConfirm($id)
     {
-        $decrypted_id = Crypt::decrypt($id);
+        $decrypted_id = Operations::decryptId($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');
@@ -257,7 +276,7 @@ class MainController extends Controller
 
     public function toAccessCategory($id)
     {
-        $decrypted_id = Crypt::decrypt($id);
+        $decrypted_id = Operations::decryptId($id);
         $category = Category::find($decrypted_id);
         if (!$category) {
             return redirect()->route('home');

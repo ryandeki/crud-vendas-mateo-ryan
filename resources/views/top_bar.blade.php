@@ -10,6 +10,7 @@
         </div>
         <div class="col">
             <div class="d-flex justify-content-end align-items-center">
+                <a href="{{ route('trash.items') }}" class="link-offset-2 link-danger link-underline-opacity-0">Lixeira</a>
                 <a href="{{ route('items') }}" class="link-offset-2 link-primary link-underline-opacity-0">Meus itens</a>
                 <a href="{{ route('categories') }}" class="link-offset-2 link-secondary link-underline-opacity-0 ms-2">Minhas categorias</a>
                 <span class="me-3">

@@ -31,24 +31,36 @@
                 <small class="text-secondary">
                     Criado em: {{ $item->created_at->format('d/m/Y H:i:s') }}
                 </small>
-                @if($item->created_at->ne($item->updated_at))
+                @if ($item->created_at->ne($item->updated_at) && $item->deleted_at === null)
                 <small class="text-secondary ms-4">
                     Atualizado em: {{ $item->updated_at->format('d/m/Y H:i:s') }}
+                </small>
+                @endif
+                @if ($item->deleted_at !== null)
+                <small class="text-danger ms-4">
+                    Excluído em: {{ $item->deleted_at->format('d/m/Y H:i:s') }}
                 </small>
                 @endif
             </div>
 
             <div class="col text-end d-flex justify-content-end align-items-center gap-2">
                 @if ($item->user_id == session('user')['id'])
-                <a href="{{ route('deleteItem', Crypt::encrypt($item->id)) }}" class="btn btn-danger px-3"
+                <a href="{{ route('deleteItem', \App\Services\Operations::encryptId($item->id)) }}" class="btn btn-danger px-3"
                     title="Excluir">
                     <i class="bi bi-trash"></i>
                 </a>
 
-                <a href="{{ route('edit.item', Crypt::encrypt($item->id)) }}" class="btn btn-secondary px-3"
-                    title="Editar">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
+                    @if ($item->deleted_at === null)
+                    <a href="{{ route('edit.item', \App\Services\Operations::encryptId($item->id)) }}" class="btn btn-secondary px-3"
+                        title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    @else
+                    <a href="{{ route('restore.item', \App\Services\Operations::encryptId($item->id)) }}" class="btn btn-warning px-3"
+                        title="Editar">
+                        <i class="bi bi-clock-history"></i>
+                    </a>
+                    @endif
                 @endif
 
                 <a href="{{ route('item.page', \App\Services\Operations::encryptId($item->id)) }}" class="btn btn-primary px-3">
