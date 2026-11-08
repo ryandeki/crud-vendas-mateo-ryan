@@ -30,6 +30,10 @@ Route::middleware([CheckIsLogged::class])->group(function () {
     Route::get('/delete-category-confirm/{id}', [MainController::class, 'deleteCategoryConfirm'])->name('delete.category.confirm');
     Route::get('/category-page/{id}', [MainController::class, 'toAccessCategory'])->name('category.page');
 
+    Route::get('/user', [MainController::class, 'toUserPage'])->name('user.page');
+    Route::get('/user/edit', [MainController::class, 'toEditUserPage'])->name('user.edit.page');
+    Route::post('/user/edit/confirm', [MainController::class, 'editUserConfirm'])->name('user.edit.confirm');
+
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

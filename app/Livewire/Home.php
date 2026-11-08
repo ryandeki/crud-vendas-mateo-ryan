@@ -4,7 +4,7 @@ use App\Models\Item;
 use Livewire\Component;
 
 class Home extends Component {
-    public string filtroNome = '';
+    public string $filtroNome = '';
 
     public function updatedFiltroNome(): void
     {

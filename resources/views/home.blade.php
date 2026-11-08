@@ -11,6 +11,7 @@
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
             </div>
             <input id="filtroNome" type="search" placeholder="Pesquisar produto" class="form-control form-control-sm"
+            wite:model="Item"
             wire:model.live.debounce.150ms="filtroNome">
         </div>
     </div>
