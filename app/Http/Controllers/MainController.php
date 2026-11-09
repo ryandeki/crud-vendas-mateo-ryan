@@ -133,7 +133,7 @@ class MainController extends Controller
     public function deleteItem($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
+        $item = Item::withTrashed()->find($decrypted_id);
 
         if (!$item || $item->user_id != session('user')['id']) {
             return redirect()->route('home');
@@ -145,7 +145,7 @@ class MainController extends Controller
     public function deleteItemConfirm($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
+        $item = Item::withTrashed()->find($decrypted_id);
 
         if (!$item || $item->user_id !== session('user')['id']) {
             return redirect()->route('home');
