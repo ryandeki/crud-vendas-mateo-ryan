@@ -13,7 +13,8 @@
             </p>
             <div class="row mt-5">
                 <div class="col-auto">
-                    <span class="badge {{ ['new' => 'bg-success', 'almost-new' => 'bg-warning', 'worn-out' => 'bg-danger'][$item->estado] }}">
+                    <span
+                        class="badge {{ ['new' => 'bg-success', 'almost-new' => 'bg-warning', 'worn-out' => 'bg-danger'][$item->estado] }}">
                         {{ ['new' => 'Novo', 'almost-new' => 'Semi-novo', 'worn-out' => 'Desgastado'][$item->estado] }}
                     </span>
                 </div>
@@ -32,13 +33,36 @@
             <div class="row align-items-center">
                 <i class="bi bi-person-circle fs-3 col-auto"></i>
                 <p class="col-auto mb-0">{{ $item->user->username; }}</p>
-                <small class="text-secondary col-auto">Anunciado em: {{ $item->created_at->format('d/m/Y H:i:s') }}</small>
+                <small class="text-secondary col-auto">Anunciado em:
+                    {{ $item->created_at->format('d/m/Y H:i:s') }}</small>
                 @if ($item->created_at != $item->updated_at)
-                <small class="text-secondary col-auto">Atualizado em: {{ $item->updated_at->format('d/m/Y H:i:s') }}</small>
+                <small class="text-secondary col-auto">Atualizado em:
+                    {{ $item->updated_at->format('d/m/Y H:i:s') }}</small>
                 @endif
             </div>
-            <small class="text-secondary">E-mail: {{ $item->user->email }}</small>
+            <div>
+                <small class="text-secondary">E-mail: {{ $item->user->email }}</small>
+            </div>
+
+            @if($item->user_id != session('user')['id'])
+            <div class="mt-3">
+                <a href="{{ route('newReview', \App\Services\Operations::encryptId($item->id)) }}"
+                    class="btn btn-primary">Avaliar</a>
+            </div>
+            @endif
         </div>
     </div>
+</div>
+
+<div class="mt-4">
+    <h5 class="fw-bold mb-3">Avaliações do Produto</h5>
+
+    @forelse ($item->reviews->sortByDesc('created_at') as $review)
+    @include('reviews.review')
+    @empty
+    <div class="alert alert-light text-center border">
+        Este produto ainda não possui nenhuma avaliação.
+    </div>
+    @endforelse
 </div>
 @endsection
