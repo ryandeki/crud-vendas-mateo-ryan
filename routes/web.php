@@ -9,6 +9,7 @@ use App\Http\Middleware\CheckIsNotLogged;
 Route::middleware([CheckIsLogged::class])->group(function () {
     Route::get('/', [MainController::class, 'index'])->name('home');
 
+    Route::get('/trash-items', [MainController::class, 'trashItems'])->name('trash.items');
     Route::get('/items', [MainController::class, 'items'])->name('items');
     Route::get('/new-item', [MainController::class, 'newItem'])->name('newItem');
     Route::post('newItemSubmit', [MainController::class, 'newItemSubmit'])->name('newItemSubmit');
@@ -16,6 +17,7 @@ Route::middleware([CheckIsLogged::class])->group(function () {
     Route::post('edit-item-submit', [MainController::class, 'editItemSubmit'])->name('edit.item.submit');
     Route::get('delete-item/{id}', [MainController::class, 'deleteItem'])->name('deleteItem');
     Route::get('delete-item-confirm/{id}', [MainController::class, 'deleteItemConfirm'])->name('delete.item.confirm');
+    Route::get('restore-item/{id}', [MainController::class, 'restoreItem'])->name('restore.item');
     Route::get('item-page/{id}', [MainController::class, 'toAccessItemPage'])->name('item.page');
 
     Route::get('/categories', [MainController::class, 'categories'])->name('categories');
@@ -27,6 +29,10 @@ Route::middleware([CheckIsLogged::class])->group(function () {
     Route::get('/delete-category/{id}', [MainController::class, 'deleteCategory'])->name('delete');
     Route::get('/delete-category-confirm/{id}', [MainController::class, 'deleteCategoryConfirm'])->name('delete.category.confirm');
     Route::get('/category-page/{id}', [MainController::class, 'toAccessCategory'])->name('category.page');
+
+    Route::get('/user', [MainController::class, 'toUserPage'])->name('user.page');
+    Route::get('/user/edit', [MainController::class, 'toEditUserPage'])->name('user.edit.page');
+    Route::post('/user/edit/confirm', [MainController::class, 'editUserConfirm'])->name('user.edit.confirm');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

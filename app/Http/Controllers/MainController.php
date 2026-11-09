@@ -131,7 +131,7 @@ class MainController extends Controller
     public function deleteItem($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::find($decrypted_id);
+        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
 
         if (!$item || $item->user_id != session('user')['id']) {
             return redirect()->route('home');
@@ -143,14 +143,38 @@ class MainController extends Controller
     public function deleteItemConfirm($id)
     {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::find($decrypted_id);
+        $item = Item::withTrashed()->where('id', $decrypted_id)->first();
 
-        if (!$item || $item->user_id != session('user')['id']) {
+        if (!$item || $item->user_id !== session('user')['id']) {
             return redirect()->route('home');
         }
 
-        $item->forceDelete();
+        if ($item->deleted_at !== null) {
+            $item->forceDelete();
+        }
+        else {
+            $item->delete();
+        }
+        
         return redirect()->route('home');
+    }
+
+    public function restoreItem($id) {
+        $decrypted_id = Operations::decryptId($id);
+        $item = Item::onlyTrashed()->where('id', $decrypted_id)->first();
+
+        if (!$item || $item->user_id !== session('user')['id']) {
+            return redirect()->route('home');
+        }
+
+        $item->restore();
+
+        return redirect()->back();
+    }
+
+    public function trashItems() {
+        $items = Item::onlyTrashed()->where('user_id', session('user')['id'])->get();
+        return view('items.trash_items', ['items' => $items]);
     }
 
     public function toAccessItemPage($id)
@@ -258,5 +282,77 @@ class MainController extends Controller
             return redirect()->route('home');
         }
         return view('category_page', ['category' => $category]);
+    }
+
+    public function toUserPage() {
+        $user = User::where('username', session('user')['username'])
+        ->whereNull('deleted_at')->first();
+
+        if (!$user) {
+            return redirect()->route('home');
+        }
+
+        return view('user_page', compact('user'));
+    }
+
+    public function toEditUserPage(Request $request) {
+        $id = $request->query('id');
+        $decrypted_id = Operations::decryptId($id);
+        $user = User::find($decrypted_id);
+
+        if (!$user || session('user')['id'] !== $user->id) {
+            return redirect()->route('home');
+        }
+
+        return view('edit_user', compact('user'));
+    }
+    
+    public function editUserConfirm(Request $request) {
+        $decrypted_id = Operations::decryptId($request->id);
+        $user = User::find($decrypted_id);
+        
+        $username = $request->text_username;
+        $email = $request->text_email;
+        $new_password = $request->new_password;
+
+        $request->validate([
+            'text_username' => 'min:3|max:50|different:field',
+            'text_email' => ['email', 'max:80', Rule::unique('users', 'email')->ignore($user->id)],
+            'new_password' => [Rule::excludeIf(empty($new_password)), 'min:6', 'max:16', 'different:current_password'],
+            'current_password' => 'required'
+        ], [
+            'text_username.required' => 'O nome de usuário é obrigatório',
+            'text_username.min' => 'O nome de usuário deve conter no mínimo :min caracteres',
+            'text_username.max' => 'O nome de usuário deve conter no máximo :max caracteres',
+            'text_username.unique' => 'Esse nome de usuário não está disponível',
+
+            'text_email.required' => 'O campo de e-mail é obrigatório',
+            'text_email.email' => 'O e-mail deve conter um endereço válido.',
+            'text_email.max' => 'O e-mail deve conter no máximo :max caracteres',
+            'text_email.unique' => 'Esse e-mail já está sendo utilizado',
+
+            'new_password.required' => 'O campo de senha é obrigatório',
+            'new_password.min' => 'A senha deve conter no mínimo :min caracteres',
+            'new_password.max' => 'A senha deve conter no máximo :max caracteres',
+            'new_password.different' => 'A nova senha não pode ser a mesma que a atual',
+
+            'current_password.required' => 'A sua senha é necessária para aplicar as alterações'
+        ]);
+
+        $current_password = $request->current_password;
+
+        if (!password_verify($current_password, $user->senha)) {
+            return redirect()->back()->withInput()->with('edit_error', 'Senha incorreta');
+        }
+        
+        $user->username = $username;
+        $user->email = $email;
+
+        if (!empty($new_password)) {
+            $user->senha = bcrypt($new_password);
+        }
+        $user->save();
+
+        return redirect()->route('user.edit.page')->withInput(['edit_success', 'Alterações salvas com sucesso']);
     }
 }

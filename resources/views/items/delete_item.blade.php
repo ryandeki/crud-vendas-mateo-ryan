@@ -9,7 +9,13 @@
                 <span class="display-3 mb-3"><i
                         class="fa-solid fa-triangleexclamation text-warning opacity-50"></i></span>
                 <h4 class="text-primary mb-3">{{ $item->nome }}</h4>
+                @if ($item->deleted_at !== null)
+                <p class="text">Confirma a exclusão permanente desse item?</p>
+                <p class="text text-danger">*Esse item será permanentemente excluído</p>
+                @else
                 <p class="text">Confirma a exclusão desse item?</p>
+                <p class="text text-warning">*Esse item será movido para a lixeira</p>
+                @endif
                 <div class="mt-3">
                     <a href="{{ route('home') }}" class="btn btn-primary px-5 m-2"><i
                             class="fa-solid fa-xmark me-2"></i>Não</a>

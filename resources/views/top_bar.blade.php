@@ -10,11 +10,19 @@
         </div>
         <div class="col">
             <div class="d-flex justify-content-end align-items-center">
-                <a href="{{ route('items') }}" class="link-offset-2 link-primary link-underline-opacity-0">Meus itens</a>
+                <div class="btn btn-outline-danger btn-md border border-danger rounded p-1 me-4">
+                    <a href="{{ route('trash.items') }}" class="link-offset-2 link-danger link-light-hover link-underline-opacity-0"><i class="bi bi-trash3"></i></a>
+                </div>
+                <a href="{{ route('items') }}" class="link-offset-2 link-primary link-underline-opacity-0 ms-2">Meus itens</a>
                 <a href="{{ route('categories') }}" class="link-offset-2 link-secondary link-underline-opacity-0 ms-2">Minhas categorias</a>
-                <span class="me-3">
-                    <i class="fa-solid fa-user-circle fa-lg text-secondary me-2"></i>{{ session('user.username') ?? '[username]' }}
-                </span>
+                <div class="col">
+                    <a href="{{ route('user.page') }}" class="link-offset-2 link-dark link-underline-opacity-0">
+                        <i class="bi bi-person-circle col-auto fs-3 ms-2"></i>
+                        <span class="me-4">
+                            <i class="fa-solid fa-user-circle fa-lg text-secondary"></i>{{ session('user.username') ?? '[username]' }}
+                        </span>
+                    </a>
+                </div>
                 <a href="{{ route('logout') }}" class="btn btn-outline-danger btn-sm px-3">
                     Logout<i class="bi bi-box-arrow-right ms-2"></i>
                 </a>
