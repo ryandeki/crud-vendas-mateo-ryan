@@ -62,7 +62,7 @@ class AuthController extends Controller
 
     public function signin()
     {
-        return view('signin');
+        return view('users.signin');
     }
 
     public function signinSubmit(Request $request)

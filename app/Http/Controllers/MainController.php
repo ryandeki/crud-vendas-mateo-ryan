@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\Review;
 use App\Services\Operations;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,7 @@ class MainController extends Controller
     {
 
         $categories = User::find(session('user')['id'])->categories;
-        return view('categories', ['categories' => $categories]);
+        return view('categories.categories', ['categories' => $categories]);
     }
 
     public function items()
@@ -177,30 +178,33 @@ class MainController extends Controller
         return view('items.trash_items', ['items' => $items]);
     }
 
-    public function toAccessItemPage($id)
-    {
+    public function toAccessItemPage($id) {
         $decrypted_id = Operations::decryptId($id);
-        $item = Item::find($decrypted_id);
+
+        $item = Item::with(['reviews' => function($query) {
+            $query->orderBy('created_at', 'asc');
+        }, 'reviews.user'])->find($decrypted_id);
+
         if (!$item) {
             return redirect()->route('home');
         }
+
         return view('items.item_page', ['item' => $item]);
     }
 
     public function newCategory()
     {
-        return view('new_category');
+        return view('categories.new_category');
     }
 
     public function newCategorySubmit(Request $request)
     {
         $request->validate([
-            'text_title' => 'required|min:3|max:50|unique:categories,nome',
+            'text_title' => 'required|min:3|max:50',
         ], [
             'text_title.required' => 'O nome é obrigatório.',
             'text_title.min' => 'O nome deve ter pelo menos :min caracteres.',
             'text_title.max' => 'O nome deve ter no máximo :max caracteres.',
-            'text_title.unique' => 'Já existe uma categoria com esse nome',
         ]);
 
         $id = session('user')['id'];
@@ -355,4 +359,73 @@ class MainController extends Controller
 
         return redirect()->route('user.edit.page')->withInput(['edit_success', 'Alterações salvas com sucesso']);
     }
+
+    
+    public function newReview($id) {
+        $decrypted_id = Operations::decryptId($id);
+        $item = Item::find($decrypted_id);
+
+        if (!$item) {
+            return redirect()->route('home');
+        }
+
+        return view('reviews.new_review', ['item' => $item]);
+    }
+
+    public function newReviewSubmit(Request $request) {
+        $request->validate([
+            'titulo' => 'required|min:3|max:50',
+            'nota' => 'required',
+        ], [
+            'titulo.required' => 'O título é obrigatório.',
+            'titulo.min' => 'O título deve ter pelo menos :min caracteres.',
+            'titulo.max' => 'O título deve ter no máximo :max caracteres.',
+            
+            'nota.required' => 'A nota é obrigatória.',
+            
+        ]);
+
+        $decrypted_id = Operations::decryptId($request->item_id);
+
+
+        $item = Item::find($decrypted_id);
+
+        if (!$item) {
+            return redirect()->back()->withErrors(['item' => 'Item não encontrado.']);
+        }
+
+        $review = new Review();
+        $user = session('user');
+        $review->user_id = is_array($user) ? $user['id'] : $user->id;
+        $review->item_id = $item->id;
+        $review->titulo = $request->titulo;
+        $review->nota = $request->nota;
+        $review->descricao = $request->descricao;
+        $review->save();
+
+        return redirect()->route('item.page', Operations::encryptId($item->id));
+        
+    }
+
+    public function deleteReview($id) {
+        $decrypted_id = Operations::decryptId($id);
+        $review = Review::find($decrypted_id);
+
+        if (!$review) {
+            return redirect()->back()->withErrors(['review' => 'Avaliação não encontrada.']);
+        }
+
+        return view('reviews.delete_review', ['review' => $review]);
+    }
+
+    public function deleteReviewConfirm($id) {
+        $decrypted_id = Operations::decryptId($id);
+        $review = Review::find($decrypted_id);
+        if (!$review) {
+            return redirect()->route('home');
+        }
+        $review->forceDelete();
+        return redirect()->route('home');
+    }
+
 }

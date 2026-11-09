@@ -28,7 +28,7 @@
     @else
     <div class="row">
         @foreach($categories->sortByDesc('created_at') as $category)
-        @include('category')
+        @include('categories.category')
         @endforeach
     </div>
     @endif

@@ -38,15 +38,7 @@
                     <i class="bi bi-pencil-square"></i>
                 </a>
 
-                @if($category->status != 'active')
-                <button class="btn btn-secondary px-3" disabled title="Categoria desativada">
-                    <i class="bi bi-ban me-2"></i>Acessar
-                </button>
-                @else
-                <a href="{{ route('category.page', Crypt::encrypt($category->id)) }}" class="btn btn-primary px-3">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Acessar
-                </a>
-                @endif
+
             </div>
 
         </div>
