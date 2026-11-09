@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Review;
+use App\Models\Adress;
 use App\Services\Operations;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Validation\Rule;
@@ -296,7 +297,7 @@ class MainController extends Controller
             return redirect()->route('home');
         }
 
-        return view('user_page', compact('user'));
+        return view('users.user_page', compact('user'));
     }
 
     public function toEditUserPage(Request $request) {
@@ -308,7 +309,7 @@ class MainController extends Controller
             return redirect()->route('home');
         }
 
-        return view('edit_user', compact('user'));
+        return view('users.edit_user', compact('user'));
     }
     
     public function editUserConfirm(Request $request) {
@@ -358,6 +359,61 @@ class MainController extends Controller
         $user->save();
 
         return redirect()->route('user.edit.page')->withInput(['edit_success', 'Alterações salvas com sucesso']);
+    }
+
+    public function toEditAdressPage(Request $request) {
+        $id = $request->query('id');
+        $decrypted_id = Operations::decryptId($id);
+        $user = User::find($decrypted_id);
+
+        if (!$user || session('user')['id'] !== $user->id) {
+            return redirect()->route('home');
+        }
+
+        return view('users.edit_adress', compact('user'));
+    }
+
+    public function editAdressConfirm(Request $request) {
+        $request->validate([
+            'input_cep' => 'required|digits:8|integer',
+            'input_numero' => 'required|integer',
+            'current_password' => 'required',
+        ], [
+            'input_cep.required' => 'O CEP é obrigatório',
+            'input_cep.digits' => 'O CEP deve haver, exatamento, :digits digitos',
+            'input_cep.integer' => 'O CEP deve conter apenas números',
+
+            'input_numero.required' => 'O número do endereço é obrigatório',
+            'input_numero.integer' => 'O número do endereço deve ser um número inteiro',
+
+            'current_password' => 'A sua senha é necessária para aplicar as alterações',
+        ]);
+
+        $decrypted_id = Operations::decryptId($request->id);
+        $user = User::find($decrypted_id);
+
+        if (!$user || session('user')['id'] !== $user->id) {
+            return redirect()->route('home');
+        }
+
+        $password = $request->current_password;
+
+        if (password_verify($password, $user->password)) {
+            return redirect()->back()->withInput()->with('edit_error', 'Senha incorreta');
+        }
+
+        $adress = new Adress();
+        $adress->cep = $request->input_cep;
+        $adress->logradouro = $request->text_logradouro;
+        $adress->numero = $request->input_numero;
+        $adress->complemento = $request->text_complemento;
+        $adress->cidade = $request->text_cidade;
+        $adress->bairro = $request->text_bairro;
+        $adress->uf = $request->text_uf;
+        $adress->user_id = session('user')['id'];
+        $adress->save();
+
+        return redirect()->route('user.page')->withInput(['edit_success', 'Alterações salvas com sucesso']);
     }
 
     

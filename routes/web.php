@@ -33,6 +33,14 @@ Route::middleware([CheckIsLogged::class])->group(function () {
     Route::get('/user', [MainController::class, 'toUserPage'])->name('user.page');
     Route::get('/user/edit', [MainController::class, 'toEditUserPage'])->name('user.edit.page');
     Route::post('/user/edit/confirm', [MainController::class, 'editUserConfirm'])->name('user.edit.confirm');
+    Route::get('/user/edit/adress/', [MainController::class, 'toEditAdressPage'])->name('user.adress.page');
+    Route::post('/user/edit/adress/confirm', [MainController::class, 'editAdressConfirm'])->name('user.adress.confirm');
+    Route::post('/user/adress/cep', [MainController::class, 'findCep'])->name('cep');
+
+    Route::get('/new-review/{id}', [MainController::class, 'newReview'])->name('newReview');
+    Route::post('/newReviewSubmit', [MainController::class, 'newReviewSubmit'])->name('newReviewSubmit');
+    Route::get('/delete-review/{id}', [MainController::class, 'deleteReview'])->name('deleteReview');
+    Route::get('/delete-review-confirm/{id}', [MainController::class, 'deleteReviewConfirm'])->name('delete.review.confirm');
 
     Route::get('/new-review/{id}', [MainController::class, 'newReview'])->name('newReview');
     Route::post('/newReviewSubmit', [MainController::class, 'newReviewSubmit'])->name('newReviewSubmit');

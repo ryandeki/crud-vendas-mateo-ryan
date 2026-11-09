@@ -13,38 +13,40 @@
 
         <input type="hidden" id="id" name="id" value="{{ \App\Services\Operations::encryptId($user->id) }}">
 
-        <div class="col-4 mb-3">
-            <label for="text_username" class="form-label">Username:</label>
-            <input type="text" class="form-control text-dark" name="text_username"
-                value="{{ $user->username }}">
-            @error('text_username')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="col-4 mb-3">
-            <label for="text_email" class="form-label">E-mail:</label>
-            <input type="email" class="form-control text-dark" name="text_email"
-                value="{{ $user->email }}">
-            @error('text_email')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="col-4 mb-3">
-            <label for="new_password" class="form-label">Nova senha:</label>
-            <input type="password" class="form-control text-dark" name="new_password">
-            @error('new_password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="col-4 mb-3">
-            <label for="current_password" class="form-label">*Senha atual:</label>
-            <input type="password" class="form-control text-dark" name="current_password">
-            @error('current_password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
+        <div class="row">
+            <div class="col-4 mb-3">
+                <label for="text_username" class="form-label">Username:</label>
+                <input type="text" class="form-control text-dark" name="text_username"
+                    value="{{ $user->username }}">
+                @error('text_username')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+    
+            <div class="col-4 mb-3">
+                <label for="text_email" class="form-label">E-mail:</label>
+                <input type="email" class="form-control text-dark" name="text_email"
+                    value="{{ $user->email }}">
+                @error('text_email')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+    
+            <div class="col-4 mb-3">
+                <label for="new_password" class="form-label">Nova senha:</label>
+                <input type="password" class="form-control text-dark" name="new_password">
+                @error('new_password')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+    
+            <div class="col-4 mb-3">
+                <label for="current_password" class="form-label">*Senha atual:</label>
+                <input type="password" class="form-control text-dark" name="current_password">
+                @error('current_password')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
 
         @if(session('edit_error'))
@@ -54,7 +56,7 @@
         @endif
         
         <div class="col-4 mb-3 ms-auto me-auto">
-            <button type="submit" class="btn btn-secondary w-100">Editar</button>
+            <button type="submit" class="btn btn-primary w-100">Salvar</button>
         </div>
     </form>
 </div>

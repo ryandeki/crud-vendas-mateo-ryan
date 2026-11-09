@@ -24,5 +24,9 @@ class User extends Model
     public function reviews() {
         return $this->hasMany(Review::class);
     }
+
+    public function adress() {
+        return $this->hasOne(Adress::class);
+    }
     
 }   
