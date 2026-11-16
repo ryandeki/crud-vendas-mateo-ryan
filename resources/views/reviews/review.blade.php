@@ -32,12 +32,14 @@
                 @endif
             </div>
 
+            @if ($review->user_id === session('user')['id'])
             <div class="col-auto text-end">
                 <a href="{{ route('deleteReview', \App\Services\Operations::encryptId($review->id)) }}"
                     class="btn btn-danger px-3" title="Excluir Avaliação">
                     <i class="bi bi-trash"></i>
                 </a>
             </div>
+            @endif
 
         </div>
     </div>

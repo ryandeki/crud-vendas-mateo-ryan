@@ -1,9 +1,14 @@
 <?php
 
+namespace App\Livewire;
+
 use App\Models\Item;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Home extends Component {
+    use WithPagination;
+
     public string $filtroNome = '';
 
     public function updatedFiltroNome(): void
@@ -13,10 +18,11 @@ class Home extends Component {
 
     public function render()
     {
-        $produtos = Item::query()
-        ->when($this->filtroNome !== '', fn ($query) => $query->where('nome', 'like', '%' . $this->filtroNome . '%'))
-        ->orderBy('nome');
+        $items = Item::query()
+            ->when($this->filtroNome !== '', fn ($query) => $query->where('nome', 'like', '%' . $this->filtroNome . '%'))
+            ->orderBy('created_at')
+            ->get();
 
-        return view('home', compact('produtos'));
+        return view('livewire.home-search', compact('items'));
     }
 }
