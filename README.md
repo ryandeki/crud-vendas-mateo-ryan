@@ -8,6 +8,8 @@ Execute o comando `composer update`; <br>
 Execute o comando `npm install`; <br>
 Duplique, cole e copie ou renomeie o arquivo .env.example para .env; <br>
 Execute o comando `php artisan key:generate`. <br>
+Execute o comando `php artisan migrate`; <br>
+*Verifique se o servidor MySQL esteja ativado.
 
 *Obs: as alterações necessárias dentro do arquivo .env já estão presentes no .env.example.
 
